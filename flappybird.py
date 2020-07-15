@@ -92,6 +92,7 @@ class Pipe:
 	def draw(self, win):
 		win.blit(self.image,self.rect)
 
+
 class Base:
 	def __init__(self):
 		self.image=pygame.image.load("images/base.png")
@@ -220,7 +221,7 @@ class Game:
 			pygame.display.update()
 			
 
-gierka=Game()
-gierka.game_on()
+game=Game()
+game.game_on()
 
 pygame.quit()
