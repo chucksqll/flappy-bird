@@ -4,13 +4,17 @@ import time
 
 pygame.init()
 
-# scr_width, scr_height=640, 480
-# screen = pygame.display.set_mode((scr_width, scr_height))
+bird_images=[
+		pygame.transform.scale(pygame.image.load("images/bird1.png"),(40,40)),
+		pygame.transform.scale(pygame.image.load("images/bird2.png"),(40,40)),
+		pygame.transform.scale(pygame.image.load("images/bird3.png"),(40,40))
+	]
 
 class Bird:
 	def __init__(self,x,y):
-		self.image = pygame.image.load("images/bird.png")
-		self.image=pygame.transform.scale(self.image,(40,40))
+		self.IMGS=bird_images
+		self.image=self.IMGS[0]
+		self.image_count=0
 		self.dead=False
 		self.rect =	self.image.get_rect()
 		self.rect.left=x
@@ -19,22 +23,54 @@ class Bird:
 		self.vel=0
 		self.time=time.perf_counter()
 		self.gravity=0.1
+		self.angle=0
+		self.animation_time=5
+		self.max_rotation=45
+		self.rotated_bird=self.image
+
+	def rotate(self):
+		if self.vel<-2:
+			self.angle=self.max_rotation
+		elif self.vel>4:
+			self.angle=-self.max_rotation*2
+		else:
+			self.angle=-self.vel*22.5
+
+		self.rotated_bird = pygame.transform.rotozoom(self.image,self.angle,1)
+
+	def animate(self):
+		if self.image_count <= self.animation_time:
+			self.image = self.IMGS[0]
+		elif self.image_count <= self.animation_time*2:
+			self.image = self.IMGS[1]
+		elif self.image_count <= self.animation_time*3:
+			self.image = self.IMGS[2]
+		elif self.image_count <= self.animation_time*4:
+			self.image = self.IMGS[1]
+		elif self.image_count == self.animation_time*4 + 1:
+			self.image = self.IMGS[0]
+			self.image_count = 0
+		self.image_count += 1
+		
 	def move(self):
 		if self.dead is True:
 			pass
 		if self.time<time.perf_counter()-0.015:
 			self.vel+=self.gravity
 			self.time=time.perf_counter()
+		self.rotate()	
+
 		self.rect.top+=self.vel
+
 
 	def jump(self):
 		if self.is_alive is True:
 			self.vel=-2
-		else:
-			pass
 
 	def draw(self, win):
-		win.blit(self.image,self.rect)
+		self.animate()
+		win.blit(self.rotated_bird,self.rect)
+
 
 class Pipe:
 	def __init__(self,x,y, is_bottom_pipe):
@@ -115,7 +151,7 @@ class Game:
 		for i in range(self.nr_of_pipes):
 			if  (
 					self.bird.rect.colliderect(self.top_pipe[i].rect) or 
-			    	self.bird.rect.colliderect(self.bot_pipe[i].rect) or 
+					self.bird.rect.colliderect(self.bot_pipe[i].rect) or 
 					self.bird.rect.colliderect(self.base.rect)
 				):
 				self.bird.is_alive=False
