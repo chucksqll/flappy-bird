@@ -246,7 +246,7 @@ class Game:
 		clock = pygame.time.Clock()
 		running=True
 		while running and len(self.birds) > 0 :
-			clock.tick(120)
+			clock.tick(90)
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					running = False
@@ -299,9 +299,7 @@ def run(config_file):
 
 
 if __name__ == '__main__':
-    # Determine path to configuration file. This path manipulation is
-    # here so that the script will run successfully regardless of the
-    # current working directory.
+	#runs only if you run it directly by typing python flappybird-neat.py
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, 'config-neat.txt')
     run(config_path)
