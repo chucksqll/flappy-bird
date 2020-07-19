@@ -131,6 +131,7 @@ class Game:
 		self.width = width
 		self.height = height
 		self.screen = pygame.display.set_mode((width, height))
+		pygame.display.set_caption('Flappy Bird Neat')
 		self.nr_of_birds = 20
 		self.birds = []
 		self.nr_of_pipes = 3

@@ -133,6 +133,7 @@ class Game:
 		self.width = width
 		self.height = height
 		self.screen = pygame.display.set_mode((self.width, height))
+		pygame.display.set_caption('Flappy Bird')
 		self.bird = Bird(width/3, height/2)
 		self.nr_of_pipes = 3
 		self.space_between_pipes = 130
